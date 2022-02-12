@@ -9,20 +9,39 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       firstName: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        allowNull: false,
       },
       lastName: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        allowNull: false,
+      },
+      userName : {
+        type: Sequelize.STRING,
+        allowNull: false,
+        unique : true
       },
       email: {
         type: Sequelize.STRING,
-        unique: true
+        allowNull: false,
+        unique : true
       },
       password: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        allowNull: false,
       },
       role: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        allowNull: false,
+      },
+      phoneNum : {
+        type :Sequelize.STRING,
+        allowNull : false,
+        unique : true
+      },
+      address : {
+        type: Sequelize.STRING,
+        allowNull: false,
       },
       createdAt: {
         allowNull: false,
