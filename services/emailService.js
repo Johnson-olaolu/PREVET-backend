@@ -6,9 +6,9 @@ const RegistrationMail = require("../templates/email/registrationMail");
 
 
 let transporter = nodemailer.createTransport(smtpTransport({
-	host: "sxb1plzcpnl489892.prod.sxb1.secureserver.net",
-	port: 465,
-	secure: true,
+	host: "smtp.ethereal.email",
+	port: 587,
+	secure: false,
 	auth: {
 		user: process.env.EMAIL_USER,
 		pass: process.env.EMAIL_PASSWORD
@@ -30,7 +30,7 @@ const sendEmail = (mailOptions) => {
 
 	transporter.sendMail(
 		{
-			from: `"Prevet" ${process.env.MAIL_USER}`,
+			from: `"Prevet" ${process.env.EMAIL_USER}`,
 			to: mailOptions.email,
 			subject: mailOptions.subject || "No Subject",
 			text: text,
@@ -38,7 +38,8 @@ const sendEmail = (mailOptions) => {
 		},
 		function (error, info) {
 			if (error) {
-				console.log(error);
+				res.status(500)
+				throw new Error({success : false, message : "Email not sent"})
 			} else {
 				console.log("Email sent: " + info.response);
 			}
