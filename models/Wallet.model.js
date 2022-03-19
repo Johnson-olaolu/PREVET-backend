@@ -31,10 +31,24 @@ module.exports = (sequelize, DataTypes) => {
     balance: {
       type: DataTypes.FLOAT,
       allowNull: false,
+      defaultValue : 0.00
     },
     ledgerBalance: {
       type: DataTypes.FLOAT,
       allowNull: false,
+      defaultValue : 0.00
+    },
+    virtualAcctNo : {
+      type: DataTypes.STRING,
+      allowNull : false
+    },
+    virtualAcctName : {
+      type : DataTypes.STRING,
+      allowNull: false
+    },
+    virtualAcctBankName : {
+      type : DataTypes.STRING,
+      allowNull : false
     },
     createdAt: {
       allowNull: false,

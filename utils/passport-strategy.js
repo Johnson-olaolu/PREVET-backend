@@ -1,8 +1,10 @@
 const LocalStrategy = require("passport-local").Strategy;
+const JWTstrategy = require("passport-jwt").Strategy;
+const ExtractJWT = require("passport-jwt").ExtractJwt;
 const passport = require("passport");
 const db = require("../models/index");
 const bcrypt = require("bcryptjs");
-const Validator = require("../validators/validators");
+const dotenv = require("dotenv").config();
 
 const Op = db.Sequelize.Op;
 const initializePassport = () => {
@@ -18,7 +20,7 @@ const initializePassport = () => {
 					},
 				});
 				if (!user) {
-					return done(null, false, {message : "User Not Found"});
+					return done(null, false, { message: "User Not Found" });
 				}
 				if (!user.verificationToken) {
 					return done(null, false, {
@@ -30,16 +32,31 @@ const initializePassport = () => {
 						message: "Wrong Password",
 					});
 				}
-				return done(null, user, { message: 'Logged in Successfully'});
+				return done(null, user, { message: "Logged in Successfully" });
 			}
 		)
 	);
 };
 
+passport.use(
+	new JWTstrategy(
+		{
+			secretOrKey: process.env.JWT_SECRET,
+			jwtFromRequest: ExtractJWT.fromAuthHeaderAsBearerToken(),
+		},
+		async (token, done) => {
+			try {
+				return done(null, token.user);
+			} catch (error) {
+				done(error);
+			}
+		}
+	)
+);
 const validatePassword = async (userPassword, password) => {
 	const passwordIsValid = await bcrypt.compareSync(password, userPassword);
-	console.log(passwordIsValid)
-	return passwordIsValid
+	console.log(passwordIsValid);
+	return passwordIsValid;
 };
 
 module.exports = initializePassport;

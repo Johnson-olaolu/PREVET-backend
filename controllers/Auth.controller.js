@@ -11,6 +11,7 @@ const Validator = require("../validators/validators");
 const jwt = require("jsonwebtoken");
 const passwordResetMail = require("../templates/email/passwordResetMail");
 const moment = require("moment");
+const WalletService = require('../services/walletService')
 
 const registerUser = asyncHandler(async (req, res) => {
 	const { error } = await Validator.register.validateAsync(req.body); //validate request
@@ -129,14 +130,22 @@ const verifyToken = asyncHandler(async (req, res) => {
 		throw new Error("Token has Expired");
 	}
 
-	console.log(user.token, token);
 	if (user.verificationToken == token) {
-		await user.update({ isVerified: true });
+		if(user.isVerified != false) {
+			res.status(401)
+			throw new Error("User already verified")
+		}
+		await user.update({ isVerified: true});
 	} else {
 		res.status(401);
 		throw new Error("Invalid token");
 	}
 
+	try {
+		await WalletService.createNewWallet(user)
+	} catch (error) {
+		
+	}
 	res.status(200).send({
 		success: true,
 		message: "user successfully verified",
@@ -189,7 +198,7 @@ const getResetPasswordLink = asyncHandler(async (req, res) => {
 	});
 
 	const expire = moment().add(15, "minutes").format("YYYY-MM-DD hh:mm:ss");
-
+	console.log(expire)
 	const link = `${process.env.CLIENT_URL}/auth/reset-password/?userId=${user.id}&accessToken=${passwordResetToken}`;
 
 	await sendEmail(new passwordResetMail(user.email, user, link));
