@@ -1,7 +1,7 @@
 const dotenv = require("dotenv").config();
 const asyncHandler = require("express-async-handler");
 const db = require("../models/index");
-const Validator = require("../validators/validators");
+const userValidator = require("../validators/userValidators");
 
 const getAllUsers = asyncHandler(async (req, res) => {
 	const users = await db.User.findAll();
@@ -10,7 +10,7 @@ const getAllUsers = asyncHandler(async (req, res) => {
 
 const getSingleUser = asyncHandler(async (req, res) => {
 	console.log(req.params.userId);
-	const { error } = await Validator.getSingleUser.validateAsync(req.params);
+	const { error } = await userValidator.getSingleUser.validateAsync(req.params);
 
 	if (error) {
 		res.status(400);
@@ -28,7 +28,7 @@ const getSingleUser = asyncHandler(async (req, res) => {
 });
 
 const updateSingleUser = asyncHandler(async (req, res) => {
-	const { error } = await Validator.updateSingleUser.validateAsync(req.body);
+	const { error } = await userValidator.updateSingleUser.validateAsync(req.body);
 
 	if (error) {
 		res.status(400);
@@ -67,7 +67,7 @@ const updateSingleUser = asyncHandler(async (req, res) => {
 });
 
 const deleteSingleUser = asyncHandler(async (req, res) => {
-    const {error}  = await Validator.deleteSingleUser.validateAsync(req.params)
+    const {error}  = await userValidator.deleteSingleUser.validateAsync(req.params)
 
     if(error) {
         res.status(400)

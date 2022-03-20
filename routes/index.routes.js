@@ -7,13 +7,13 @@ const isAuthenticated = require('../middleware/AuthMiddleware')
 // import Routes
 const userRoutes = require("./User.routes")
 const authRoutes = require("./Auth.routes")
-const testRoutes = require("./Test.routes")
-
+const transactionRoutes = require("./Transaction.routes")
+const walletRoutes = require("./Wallet.routes")
 
 // routes
 router.use("/auth", authRoutes)
-router.use("/test" , testRoutes)
+router.use("/transaction" , transactionRoutes)
 router.use("/user" , isAuthenticated , userRoutes)
-
+router.use("/wallet", isAuthenticated, walletRoutes)
 
 module.exports = router

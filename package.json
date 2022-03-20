@@ -39,6 +39,7 @@
     "passport-local": "^1.0.0",
     "sequelize": "^6.16.0",
     "sequelize-cli": "^6.4.1",
-    "typeorm": "^0.2.41"
+    "typeorm": "^0.2.41",
+    "uniqid": "^5.4.0"
   }
 }

@@ -7,14 +7,14 @@ const db = require("../models/index");
 const sendEmail = require("../services/emailService");
 const RegistrationMail = require("../templates/email/registrationMail");
 const VerificationTokenMail = require("../templates/email/verificationTokenMail") 
-const Validator = require("../validators/validators");
+const authValidator = require("../validators/authValidators");
 const jwt = require("jsonwebtoken");
 const passwordResetMail = require("../templates/email/passwordResetMail");
 const moment = require("moment");
 const WalletService = require('../services/walletService')
 
 const registerUser = asyncHandler(async (req, res) => {
-	const { error } = await Validator.register.validateAsync(req.body); //validate request
+	const { error } = await authValidator.register.validateAsync(req.body); //validate request
 	if (error) {
 		res.status(400);
 		throw new Error(error.message);
@@ -75,7 +75,7 @@ const registerUser = asyncHandler(async (req, res) => {
 });
 
 const getVerificationToken = asyncHandler(async (req, res) => {
-	const { error } = await Validator.getVerificationToken.validateAsync(
+	const { error } = await authValidator.getVerificationToken.validateAsync(
 		req.query
 	);
 	if (error) {
@@ -110,7 +110,7 @@ const getVerificationToken = asyncHandler(async (req, res) => {
 });
 
 const verifyToken = asyncHandler(async (req, res) => {
-	const { error } = await Validator.verifyToken.validateAsync(req.body);
+	const { error } = await authValidator.verifyToken.validateAsync(req.body);
 	if (error) {
 		res.status(400);
 		throw new Error(error.message);
@@ -176,7 +176,7 @@ const loginUser = asyncHandler(async (req, res, next) => {
 });
 
 const getResetPasswordLink = asyncHandler(async (req, res) => {
-	const { error } = await Validator.getChangePasswordLink.validateAsync(req.query);
+	const { error } = await authValidator.getChangePasswordLink.validateAsync(req.query);
 	if (error) {
 		res.status(400);
 		throw new Error(error.message);
@@ -213,7 +213,7 @@ const getResetPasswordLink = asyncHandler(async (req, res) => {
 
 
 const resetPassword = asyncHandler(async (req, res) => {
-	const {error} = await Validator.resetPassword.validateAsync(req.body)
+	const {error} = await authValidator.resetPassword.validateAsync(req.body)
 
 	if(error) {
 		res.status(400)
