@@ -1,10 +1,8 @@
 const express = require("express")
 const router = express.Router()
-const WalletService = require("../services/walletService")
+const { confirmCredit }  = require('../controllers/Transaction.controller')
 
-router.get("/credit", (req, res) => {
-    
-})
+router.get("/confirm-credit", confirmCredit)
 
 router.get("/debit", (req, res) => {
     

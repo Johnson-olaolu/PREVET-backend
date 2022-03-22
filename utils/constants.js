@@ -5,7 +5,17 @@ const transactionStatus = {
     COMPLETED: "COMPLETED",
   };
 
+  const transactionType = {
+    CREDIT : "CREDIT",
+    DEBIT : "DEBIT"
+  }
+
+  const transactionConfirmedStatus  = {
+    CONFIRMED: "CONFIRMED"
+  }
 
 module.exports = {
-    transactionStatus
+    transactionStatus,
+    transactionType,
+    transactionConfirmedStatus
 }

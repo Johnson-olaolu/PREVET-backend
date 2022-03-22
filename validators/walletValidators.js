@@ -9,6 +9,10 @@ const creditWallet = Joi.object({
     amount : Joi.number().min(100)
 })
 
+const confirmCredit = Joi.object({
+    paymentReference : Joi.string().required()
+})
+
 const debitWallet = Joi.object({
     walletId : Joi.string().required(),
     amount : Joi.number().min(100)
@@ -17,5 +21,6 @@ const debitWallet = Joi.object({
 module.exports = {
     getSingleWallet,
     creditWallet, 
+    confirmCredit,
     debitWallet
 }

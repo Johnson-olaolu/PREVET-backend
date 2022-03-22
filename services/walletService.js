@@ -2,6 +2,7 @@ const dotenv = require("dotenv").config();
 const uniqid = require("uniqid");
 const db = require("../models/index");
 const moment = require("moment");
+const { transactionStatus, transactionType, transactionConfirmedStatus } = require("../utils/constants.js");
 const MonifyService = require("./monifyService");
 
 const createNewWallet = async (user) => {
@@ -40,7 +41,13 @@ const initiateMonifyCreditWallet = async (walletId, amount) => {
 	const wallet = await db.Wallet.findOne({ where: { id: walletId } });
 
 	const user = await db.User.findOne({ where: { id: wallet.userId } });
-	
+
+	const transaction = await db.Transaction.create({
+		walletId: wallet.id,
+		userId: user.id,
+		status: transactionStatus.STARTED,
+	});
+
 	const presentDate = moment().format("YYYYMMDD");
 	const paymentReference = uniqid(`${user.userName}-`, `-${presentDate}`);
 
@@ -52,7 +59,7 @@ const initiateMonifyCreditWallet = async (walletId, amount) => {
 		paymentDescription: "Credit Prevet Wallet",
 		currencyCode: "NGN",
 		contractCode: process.env.MONIFY_CONTACT_CODE,
-		redirectUrl: `${process.env.REDIRECT_URL}/payment/confirm`,
+		redirectUrl: `${process.env.REDIRECT_URL}/transaction/confirm-credit`,
 		paymentMethods: ["CARD", "ACCOUNT_TRANSFER"],
 	};
 
@@ -61,16 +68,82 @@ const initiateMonifyCreditWallet = async (walletId, amount) => {
 		accessToken
 	);
 
-	await db.Transaction.create({
-		walletId: wallet.id,
-		userId: user.id,
-		transactionReference: monifyTransaction.paymentReference,
+	await transaction.update({
+		status: transactionStatus.INPROGRESS,
+		transactionReference: monifyTransaction.transactionReference,
+		paymentReference: monifyTransaction.paymentReference,
 	});
 
 	return monifyTransaction.checkoutUrl;
 };
 
-const confirmMonifyCreditWallet = async () => {};
+const confirmMonifyCreditWallet = async (paymentReference) => {
+	const activeTransaction = await db.Transaction.findOne({
+		where: { paymentReference: paymentReference },
+	});
+
+	if (!activeTransaction) {
+		throw new Error(" transaction does not exist");
+	}
+
+	const activeWallet = await db.Wallet.findOne({
+		where: { id: activeTransaction.walletId },
+	});
+	const activeUser = await db.User.findOne({
+		where: { id: activeTransaction.userId },
+	});
+
+	let encodedtransactionReference = encodeURI(
+		activeTransaction.transactionReference
+	);
+
+	const { accessToken } = await MonifyService.getMonifyBearerToken();
+
+	const confirmedMonifyTransaction = await MonifyService.confirmTransaction(
+		encodedtransactionReference,
+		accessToken
+	);
+
+	let transactionData = {};
+	for (let field in confirmedMonifyTransaction) {
+		if (
+			field == "cardDetails" ||
+			field == "product" ||
+			field == "customer" ||
+			field == "metaData" ||
+			field == "accountPayments" ||
+			field == "accountDetails"
+		) {
+			transactionData[field] = JSON.stringify(
+				confirmedMonifyTransaction[field]
+			);
+		}else {
+			transactionData[field] = confirmedMonifyTransaction[field];
+		transactionData["status"] = transactionStatus.COMPLETED
+		}
+
+		
+	}
+
+	await activeTransaction.update(transactionData)
+
+	await db.WalletTransaction.create({
+		transactionType : transactionType.CREDIT,
+		walletId : activeWallet.id,
+		prevBalance : activeWallet.balance,
+		currBalance : activeWallet.balance + activeTransaction.amountPaid,
+		confirmed : transactionConfirmedStatus.CONFIRMED,
+		reference : activeTransaction.paymentReference,
+		userId : activeUser.id
+	})
+
+	await activeWallet.update({
+		balance : activeWallet.balance + activeTransaction.amountPaid,
+		ledgerBalance : activeWallet.ledgerBalance + activeTransaction.amountPaid
+	})
+	
+	return activeTransaction.status
+};
 
 module.exports = {
 	createNewWallet,

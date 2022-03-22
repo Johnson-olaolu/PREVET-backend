@@ -54,6 +54,18 @@ module.exports = (sequelize, DataTypes) => {
 			cardDetails: {
 				type: DataTypes.STRING,
 			},
+			product: {
+				type: DataTypes.STRING,
+			},
+			metaData: {
+				type: DataTypes.STRING,
+			},
+			accountDetails: {
+				type: DataTypes.STRING,
+			},
+			accountPayments: {
+				type: DataTypes.STRING,
+			},
 			paymentMethod: {
 				type: DataTypes.STRING,
 			},

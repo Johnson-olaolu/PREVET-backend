@@ -32,7 +32,6 @@ const createVirtualAccount = async (payload, accessToken) => {
 };
 
 const initiateTransaction = async (payload, accessToken) => {
-	console.log("monify");
 	const response = await axios.post(
 		`${process.env.MONIFY_BASE_URL}/api/v1/merchant/transactions/init-transaction`,
 		payload,
@@ -45,8 +44,20 @@ const initiateTransaction = async (payload, accessToken) => {
 	return response.data.responseBody;
 };
 
+const confirmTransaction = async (paymentReference, accessToken) => {
+	 const response = await axios.get(
+		 `${process.env.MONIFY_BASE_URL}/api/v2/transactions/${paymentReference}`, {
+			 headers : {
+				 Authorization : `Bearer ${accessToken}`
+			 }
+		 }
+	 )
+	 return response.data.responseBody
+}
+
 module.exports = {
 	getMonifyBearerToken,
 	createVirtualAccount,
 	initiateTransaction,
+	confirmTransaction
 };
