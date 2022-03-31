@@ -121,8 +121,6 @@ const confirmMonifyCreditWallet = async (paymentReference) => {
 			transactionData[field] = confirmedMonifyTransaction[field];
 		transactionData["status"] = transactionStatus.COMPLETED
 		}
-
-		
 	}
 
 	await activeTransaction.update(transactionData)

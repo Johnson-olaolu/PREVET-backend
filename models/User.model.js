@@ -64,6 +64,12 @@ module.exports = (sequelize, DataTypes) => {
     passwordResetToken : {
       type: DataTypes.STRING
     },
+    state : {
+      type : DataTypes.STRING
+    },
+    localGovernment : {
+      type: DataTypes.STRING
+    },
     isVerified : {
       type : DataTypes.BOOLEAN,
       allowNull : false,

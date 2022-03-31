@@ -91,6 +91,8 @@ const deleteSingleUser = asyncHandler(async (req, res) => {
     })
 });
 
+
+
 module.exports = {
 	getSingleUser,
 	getAllUsers,

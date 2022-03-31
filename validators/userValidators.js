@@ -15,6 +15,8 @@ const deleteSingleUser = Joi.object({
     userId : Joi.string().required()
 })
 
+
+
 module.exports = {
     getSingleUser, 
     updateSingleUser ,

@@ -5,7 +5,7 @@ module.exports = {
 		await queryInterface.changeColumn("Transactions", "cardDetails", {
 			type: Sequelize.STRING(1500),
 		});
-    await queryInterface.addColumn("Transactions", "accountDetails", {
+    await queryInterface.addColumn("Transactions", "accountPayments", {
       after : "status",
       type: Sequelize.STRING,
     });

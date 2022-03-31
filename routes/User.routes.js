@@ -6,4 +6,5 @@ router.get("/", getAllUsers)
 router.get("/:userId", getSingleUser)
 router.put("/:userId", updateSingleUser)
 router.delete("/:userId", deleteSingleUser)
+
 module.exports = router
