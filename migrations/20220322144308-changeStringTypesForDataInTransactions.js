@@ -3,26 +3,26 @@
 module.exports = {
 	async up(queryInterface, Sequelize) {
 		await queryInterface.changeColumn("Transactions", "cardDetails", {
-			type: Sequelize.STRING(1500),
+			type: Sequelize.TEXT,
 		});
     await queryInterface.addColumn("Transactions", "accountPayments", {
       after : "status",
-      type: Sequelize.STRING,
+      type: Sequelize.TEXT,
     });
-    await queryInterface.changeColumn("Transactions", "product", {
-			type: Sequelize.STRING(1500),
+    await queryInterface.addColumn("Transactions", "product", {
+      after : "accountPayments",
+			type: Sequelize.TEXT,
+		});
+    await queryInterface.addColumn("Transactions", "metaData", {
+      after : "product",
+			type: Sequelize.TEXT
 		});
     await queryInterface.changeColumn("Transactions", "customer", {
-			type: Sequelize.STRING(1500),
+			type: Sequelize.TEXT,
 		});
-    await queryInterface.changeColumn("Transactions", "metaData", {
-			type: Sequelize.STRING(1500),
-		});
-    await queryInterface.changeColumn("Transactions", "accountPayments", {
-			type: Sequelize.STRING(1500),
-		});
-    await queryInterface.changeColumn("Transactions", "accountDetails", {
-			type: Sequelize.STRING(1500),
+    await queryInterface.addColumn("Transactions", "accountDetails", {
+      after : "metaData",
+			type: Sequelize.TEXT,
 		});
 	},
 
@@ -31,21 +31,10 @@ module.exports = {
         type: Sequelize.STRING,
       });
       
-      await queryInterface.changeColumn("Transactions", "product", {
-        type: Sequelize.STRING,
-      });
+      await queryInterface.removeColumn("Transactions", "product");
       await queryInterface.removeColumn("Transactions", "accountDetails");
-      await queryInterface.changeColumn("Transactions", "customer", {
-        type: Sequelize.STRING,
-      });
-      await queryInterface.changeColumn("Transactions", "metaData", {
-        type: Sequelize.STRING,
-      });
-      await queryInterface.changeColumn("Transactions", "accountPayments", {
-        type: Sequelize.STRING,
-      });
-      await queryInterface.changeColumn("Transactions", "accountDetails", {
-        type: Sequelize.STRING,
-      });
+      await queryInterface.removeColumn("Transactions", "customer");
+      await queryInterface.removeColumn("Transactions", "metaData");
+      await queryInterface.removeColumn("Transactions", "accountPayments");
 	},
 };
