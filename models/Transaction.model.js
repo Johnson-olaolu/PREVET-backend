@@ -34,7 +34,7 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING
     },
     paidOn: {
-      type: DataTypes.STRING
+      type: DataTypes.DATE
     },
     paymentDescription: {
       type: DataTypes.STRING
@@ -64,7 +64,7 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING
     },
     amount: {
-      type: DataTypes.STRING
+      type: DataTypes.FLOAT
     },
     reference: {
       type: DataTypes.STRING
@@ -88,8 +88,8 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.DATE
     },
     fee: {
-      type: DataTypes.STRING
-    },
+      type: DataTypes.FLOAT
+    }
   }, {
     sequelize,
     modelName: 'Transaction',
