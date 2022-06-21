@@ -11,29 +11,17 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      Permission.belongsToMany(models.Role, { through: 'rolesPermissions' })
     }
   }
   Permission.init({
-    id: {
-      allowNull: false,
-      autoIncrement: true,
-      primaryKey: true,
-      type: DataTypes.INTEGER
+    name : {
+      type : DataTypes.STRING,
+      allowNull : false
     },
-    name: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-    role : {
-      type: DataTypes.STRING
-    },
-    createdAt: {
-      allowNull: false,
-      type: DataTypes.DATE
-    },
-    updatedAt: {
-      allowNull: false,
-      type: DataTypes.DATE
+    description : {
+      type : DataTypes.TEXT,
+      allowNull : false
     }
   }, {
     sequelize,

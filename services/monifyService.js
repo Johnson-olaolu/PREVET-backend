@@ -19,7 +19,7 @@ const getMonifyBearerToken = async () => {
 };
 
 const createVirtualAccount = async (payload, accessToken) => {
-	const response = await axios.post(s
+	const response = await axios.post(
 		`${process.env.MONIFY_BASE_URL}/api/v2/bank-transfer/reserved-accounts`,
 		payload,
 		{

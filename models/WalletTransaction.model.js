@@ -2,6 +2,7 @@
 const {
   Model
 } = require('sequelize');
+const { transactionType } = require('../utils/enums');
 module.exports = (sequelize, DataTypes) => {
   class WalletTransaction extends Model {
     /**
@@ -11,50 +12,33 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      WalletTransaction.belongsTo(models.Wallet)
+      WalletTransaction.hasMany(models.Transaction)
     }
   }
   WalletTransaction.init({
-    id: {
-      allowNull: false,
-      autoIncrement: true,
-      primaryKey: true,
-      type: DataTypes.INTEGER
+    transactionType : {
+      type : DataTypes.ENUM({
+        values : transactionType
+      })
     },
-    transactionType: {
-      type: DataTypes.STRING,
-      allowNull: false,
+    prevBalance : {
+      type : DataTypes.FLOAT,
+      allowNull : false,
+      defaultValue : 0
     },
-    walletId: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
+    currBalance : {
+      type : DataTypes.FLOAT,
+      allowNull : false,
+      defaultValue : 0
+    }, 
+    confirmed : {
+      type : DataTypes.BOOLEAN,
+      allowNull : false,
+      defaultValue : false
     },
-    prevBalance: {
-      type: DataTypes.FLOAT,
-      allowNull: false,
-    },
-    currBalance: {
-      type: DataTypes.FLOAT,
-      allowNull: false,
-    },
-    confirmed: {
-      type: DataTypes.FLOAT,
-      allowNull: false,
-    },
-    reference: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-    userId: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-    },
-    createdAt: {
-      allowNull: false,
-      type: DataTypes.DATE
-    },
-    updatedAt: {
-      allowNull: false,
-      type: DataTypes.DATE
+    reference : {
+      type : DataTypes.STRING,
     }
   }, {
     sequelize,

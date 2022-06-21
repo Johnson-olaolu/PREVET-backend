@@ -11,67 +11,61 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      User.hasMany(models.Account)
+      User.belongsTo(models.Role)
+      User.hasOne(models.Wallet)
     }
   }
   User.init({
-    id: {
-      allowNull: false,
-      autoIncrement: true,
-      primaryKey: true,
-      type: DataTypes.INTEGER
-    },
     firstName: {
-      type: DataTypes.STRING,
-      allowNull: false,
+      type : DataTypes.STRING,
+      allowNull : false
     },
-    lastName: {
-      type: DataTypes.STRING,
-      allowNull: false,
+    lastName : {
+      type : DataTypes.STRING,
+      allowNull : false
     },
-    email: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      unique: true
+    email : {
+      type : DataTypes.STRING,
+      allowNull : false,
+      unique : true
     },
     phoneNum : {
-      type: DataTypes.STRING,
-      allowNull: false,
+      type : DataTypes.STRING,
+      allowNull : false,
+      unique : true
     },
     userName : {
-      type: DataTypes.STRING,
-      allowNull: false,
-      unique: true
-    },
-    address : {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-    password: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-    role: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-    },
-    verificationToken : {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-    tokenExpiresIn : {
-      type : DataTypes.DATE
-    },
-    passwordResetToken : {
-      type: DataTypes.STRING
+      type : DataTypes.STRING,
+      allowNull : false,
+      unique : true
     },
     state : {
       type : DataTypes.STRING
     },
     localGovernment : {
-      type: DataTypes.STRING
+      type : DataTypes.STRING
+    },
+    address : {
+      type : DataTypes.TEXT,
+      allowNull : false
+    },
+    password : {
+      type : DataTypes.STRING,
+      allowNull : false
+    }, 
+    verificationToken : {
+      type : DataTypes.STRING,
+      allowNull : false
+    },
+    tokenExpiresIn : {
+      type : DataTypes.DATE
+    },
+    passwordResetToken : {
+      type : DataTypes.STRING
     },
     isVerified : {
-      type : DataTypes.BOOLEAN,
+      type : DataTypes.BOOLEAN ,
       allowNull : false,
       defaultValue : false
     }

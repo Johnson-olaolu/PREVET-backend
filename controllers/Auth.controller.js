@@ -98,7 +98,6 @@ const getVerificationToken = asyncHandler(async (req, res) => {
 	});
 	const expire = moment().add(15, "minutes").format("YYYY-MM-DD hh:mm:ss");
 
-	console.log(expire)
 	await sendEmail(new VerificationTokenMail(user.email, user, verificationToken));
 
 	await user.update({ verificationToken: verificationToken , tokenExpiresIn : expire });
@@ -144,7 +143,8 @@ const verifyToken = asyncHandler(async (req, res) => {
 	try {
 		await WalletService.createNewWallet(user)
 	} catch (error) {
-		
+		console.log(error);
+		throw new Error("could not create wallet")
 	}
 	res.status(200).send({
 		success: true,

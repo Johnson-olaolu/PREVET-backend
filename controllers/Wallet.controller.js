@@ -26,7 +26,14 @@ const getSingleWallet = asyncHandler(async (req, res) => {
 	});
 });
 
-const getAllWallets = asyncHandler(async (req, res) => {});
+
+const getAllWallets = asyncHandler(async (req, res) => {
+	const wallets = await db.Wallet.findAll()
+	res.status(200).json({
+		success : true,
+		data : wallets
+	})
+});
 
 const initiateCreditWallet = asyncHandler(async (req, res) => {
 	const { error } = await walletValidator.creditWallet.validateAsync(

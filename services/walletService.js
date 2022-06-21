@@ -7,7 +7,6 @@ const MonifyService = require("./monifyService");
 
 const createNewWallet = async (user) => {
 	const { accessToken } = await MonifyService.getMonifyBearerToken();
-
 	const payload = {
 		accountReference: user.userName,
 		accountName: `${user.firstName} ${user.lastName}`,
@@ -23,7 +22,6 @@ const createNewWallet = async (user) => {
 		payload,
 		accessToken
 	);
-
 	const newWallet = {
 		userEmail: user.email,
 		userId: user.id,
@@ -32,7 +30,9 @@ const createNewWallet = async (user) => {
 		virtualAcctBankName: virtualAcctDetails.accounts[0].bankName,
 	};
 
-	const wallet = await db.Wallet.create(newWallet);
+	const wallet = await db.Wallet.create(newWallet)
+
+	return wallet
 };
 
 const initiateMonifyCreditWallet = async (walletId, amount) => {
@@ -117,29 +117,29 @@ const confirmMonifyCreditWallet = async (paymentReference) => {
 			transactionData[field] = JSON.stringify(
 				confirmedMonifyTransaction[field]
 			);
-		}else {
+		} else {
 			transactionData[field] = confirmedMonifyTransaction[field];
-		transactionData["status"] = transactionStatus.COMPLETED
+			transactionData["status"] = transactionStatus.COMPLETED
 		}
 	}
 
 	await activeTransaction.update(transactionData)
 
 	await db.WalletTransaction.create({
-		transactionType : transactionType.CREDIT,
-		walletId : activeWallet.id,
-		prevBalance : activeWallet.balance,
-		currBalance : activeWallet.balance + activeTransaction.amountPaid,
-		confirmed : transactionConfirmedStatus.CONFIRMED,
-		reference : activeTransaction.paymentReference,
-		userId : activeUser.id
+		transactionType: transactionType.CREDIT,
+		walletId: activeWallet.id,
+		prevBalance: activeWallet.balance,
+		currBalance: activeWallet.balance + activeTransaction.amountPaid,
+		confirmed: transactionConfirmedStatus.CONFIRMED,
+		reference: activeTransaction.paymentReference,
+		userId: activeUser.id
 	})
 
 	await activeWallet.update({
-		balance : activeWallet.balance + activeTransaction.amountPaid,
-		ledgerBalance : activeWallet.ledgerBalance + activeTransaction.amountPaid
+		balance: activeWallet.balance + activeTransaction.amountPaid,
+		ledgerBalance: activeWallet.ledgerBalance + activeTransaction.amountPaid
 	})
-	
+
 	return activeTransaction.status
 };
 

@@ -8,21 +8,24 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      userEmail: {
+      virtualAccountNo: {
         type: Sequelize.STRING,
-        allowNull: false,
       },
-      userId: {
-        type: Sequelize.INTEGER,
-        allowNull: false,
+      virtualAccountName: {
+        type: Sequelize.STRING
       },
-      balance: {
-        type: Sequelize.FLOAT,
-        allowNull: false,
+      virtualAccountBankName: {
+        type: Sequelize.STRING
+      }, 
+      balance : {
+        type : Sequelize.FLOAT,
+        allowNull : false,
+        defaultValue : 0
       },
-      ledgerBalance: {
-        type: Sequelize.FLOAT,
-        allowNull: false,
+      ledgerBalance : {
+        type : Sequelize.FLOAT,
+        allowNull : false,
+        defaultValue : 0
       },
       createdAt: {
         allowNull: false,
